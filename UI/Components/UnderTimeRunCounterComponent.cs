@@ -32,7 +32,7 @@ namespace LiveSplit.UI.Components
 
         private RegularUnderTimeRunCounterTimeFormatter Formatter { get; set; }
 
-        private int underTimeRunCounterComponent = 0;
+        private int underTimeRunCounterValue = 0;
 
         public UnderTimeRunCounterComponent(LiveSplitState state)
         {
@@ -119,14 +119,14 @@ namespace LiveSplit.UI.Components
         public void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
         {
             InternalComponent.InformationName = Settings.LabelText;
-            InternalComponent.InformationValue = underTimeRunCounterComponent.ToString();
+            InternalComponent.InformationValue = underTimeRunCounterValue.ToString();
             InternalComponent.Update(invalidator, state, width, height, mode);
         }
 
         private void UpdateUnderTimeCounterValue(LiveSplitState state)
         {
             var completedRunsId = state.Run[state.Run.Count - 1].SegmentHistory.Select(s => s.Key);
-            underTimeRunCounterComponent = state.Run.AttemptHistory
+            underTimeRunCounterValue = state.Run.AttemptHistory
                 .Where(a => completedRunsId.Contains(a.Index))
                 .Count(a => a.Duration < Settings.TargetTime) 
                 + Convert.ToInt32(state.CurrentPhase == TimerPhase.Ended && state.CurrentTime.RealTime < Settings.TargetTime);

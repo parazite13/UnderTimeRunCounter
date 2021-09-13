@@ -11,6 +11,8 @@ namespace LiveSplit.UI.Components
 
         public event Action OnUpdate;
 
+        private bool isLoaded = false;
+
         public UnderTimeRunCounterSettings()
         {
             InitializeComponent();
@@ -63,20 +65,23 @@ namespace LiveSplit.UI.Components
 
         private void UpdateTargetTime()
         {
-            if (!int.TryParse(timeHours.Text, out int hours))
+            if(isLoaded)
             {
-                hours = 0;
+                if (!int.TryParse(timeHours.Text, out int hours))
+                {
+                    hours = 0;
+                }
+                if (!int.TryParse(timeMinutes.Text, out int minutes))
+                {
+                    minutes = 0;
+                }
+                if(!int.TryParse(timeSeconds.Text, out int seconds))
+                {
+                    seconds = 0;
+                }
+                TargetTime = TimeSpan.FromHours(hours) + TimeSpan.FromMinutes(minutes) +  TimeSpan.FromSeconds(seconds);
+                OnUpdate?.Invoke();
             }
-            if (!int.TryParse(timeMinutes.Text, out int minutes))
-            {
-                minutes = 0;
-            }
-            if(!int.TryParse(timeSeconds.Text, out int seconds))
-            {
-                seconds = 0;
-            }
-            TargetTime = TimeSpan.FromHours(hours) + TimeSpan.FromMinutes(minutes) +  TimeSpan.FromSeconds(seconds);
-            OnUpdate?.Invoke();
         }
 
         private void labelText_TextChanged(object sender, EventArgs e)
@@ -90,6 +95,7 @@ namespace LiveSplit.UI.Components
             timeHours.Text = TargetTime.Hours.ToString();
             timeMinutes.Text = TargetTime.Minutes.ToString();
             timeSeconds.Text = TargetTime.Seconds.ToString();
+            isLoaded = true;
         }
     }
 }
