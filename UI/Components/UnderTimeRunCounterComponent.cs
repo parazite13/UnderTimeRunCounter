@@ -128,7 +128,7 @@ namespace LiveSplit.UI.Components
             var completedRunsId = state.Run[state.Run.Count - 1].SegmentHistory.Select(s => s.Key);
             underTimeRunCounterValue = state.Run.AttemptHistory
                 .Where(a => completedRunsId.Contains(a.Index))
-                .Count(a => a.Duration < Settings.TargetTime) 
+                .Count(a => a.Time.RealTime < Settings.TargetTime) 
                 + Convert.ToInt32(state.CurrentPhase == TimerPhase.Ended && state.CurrentTime.RealTime < Settings.TargetTime);
         }
 
